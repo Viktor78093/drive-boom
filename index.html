@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Демо: скрыто от поисковиков. После продажи удалить эту строку. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Драйв Бум — шиномонтаж и автосервис по записи, Комсомольск-на-Амуре</title>
+<meta name="description" content="Шиномонтаж и автосервис «Драйв Бум» на Станционной, 2/2. Запись онлайн без очереди, ежедневно 9:00–21:00. Комсомольск-на-Амуре.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Демо для владельца. Фото — из их галереи в 2ГИС.
+     Стиль снят с их фасада: тёмный кирпич, неоновая зелёно-жёлтая вывеска,
+     жёлтая графика с протектором на воротах, красная машинка в логотипе. */
+  :root {
+    --bg: #111213; --bg2: #191b1d; --bg3: #212427;
+    --text: #f3f3ef; --soft: #cfd0cb; --dim: #92948f;
+    --neon: #a6ff2e; --yellow: #ffd60a; --red: #e3262d;
+    --line: rgba(255,255,255,.1); --line2: rgba(255,255,255,.24);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+  body { background: var(--bg); color: var(--text); font: 17px/1.6 "Golos Text", system-ui, sans-serif; }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px; }
+  .h { font-family: "Russo One", sans-serif; font-weight: 400; text-transform: uppercase; line-height: 1.02;
+       font-size: clamp(32px, 5vw, 58px); letter-spacing: .01em; }
+  .h .y { color: var(--yellow); } .h .g { color: var(--neon); }
+  .lead { color: var(--soft); max-width: 36em; }
+  .lead + .lead { margin-top: 1em; }
+  .kick { display: inline-flex; align-items: center; gap: 10px; font: 700 13px/1 "Golos Text", sans-serif; letter-spacing: .16em;
+          text-transform: uppercase; color: var(--neon); }
+  .kick::before { content: ""; width: 26px; height: 3px; background: currentColor; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 17px 28px; border-radius: 10px;
+         font: 700 15px/1.2 "Golos Text", sans-serif; letter-spacing: .04em; text-transform: uppercase; cursor: pointer;
+         background: var(--yellow); color: #141414; border: 2px solid var(--yellow); transition: transform .15s, box-shadow .2s; }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 30px rgba(255,214,10,.25); }
+  .btn.line { background: transparent; color: var(--text); border-color: var(--line2); }
+  .btn.line:hover { border-color: var(--text); box-shadow: none; }
+  .btn svg { width: 20px; height: 20px; }
+
+  /* Шапка */
+  header { position: fixed; inset: 0 0 auto; z-index: 20; padding: 16px 0; transition: background .25s, padding .25s; border-bottom: 1px solid transparent; }
+  header.solid, header.open { background: rgba(17,18,19,.96); padding: 10px 0; border-bottom-color: var(--line); backdrop-filter: blur(8px); }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .logo { display: flex; align-items: center; gap: 12px; font: 400 21px/1 "Russo One", sans-serif; text-transform: uppercase; }
+  .logo i { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; flex: none;
+            background: radial-gradient(circle, var(--red) 0 44%, #fff 46% 52%, var(--neon) 54% 100%); box-shadow: 0 0 18px rgba(166,255,46,.45); }
+  .logo i svg { width: 18px; height: 18px; color: #fff; }
+  .logo span { color: var(--neon); text-shadow: 0 0 14px rgba(166,255,46,.55); }
+  header nav { display: flex; gap: 26px; font-size: 15px; font-weight: 600; }
+  header nav a { opacity: .85; } header nav a:hover { opacity: 1; color: var(--yellow); }
+  .tel { font-weight: 700; white-space: nowrap; }
+  .burger { display: none; width: 44px; height: 44px; border: 0; background: none; cursor: pointer; position: relative; margin-right: -10px; color: var(--text); }
+  .burger span, .burger span::before, .burger span::after { position: absolute; left: 11px; width: 22px; height: 2px; background: currentColor; content: ""; transition: transform .2s, top .2s, background .2s; }
+  .burger span { top: 21px; } .burger span::before { left: 0; top: -7px; } .burger span::after { left: 0; top: 7px; }
+  header.open .burger span { background: transparent; }
+  header.open .burger span::before { top: 0; transform: rotate(45deg); }
+  header.open .burger span::after { top: 0; transform: rotate(-45deg); }
+
+  /* Первый экран: чистый тёмный фон, неоновый заголовок, фото — отдельной карточкой */
+  .hero { position: relative; overflow: hidden; background:
+          radial-gradient(700px 500px at 78% 40%, rgba(166,255,46,.12), transparent 70%),
+          radial-gradient(500px 400px at 10% 90%, rgba(255,214,10,.08), transparent 70%), var(--bg); }
+  .hero .wrap { position: relative; display: grid; grid-template-columns: 1.15fr .85fr; gap: 56px; align-items: center;
+                min-height: 100svh; padding-top: 110px; padding-bottom: 70px; }
+  .hero h1 { margin-top: 18px; font: 400 clamp(56px, 8.6vw, 124px)/.9 "Russo One", sans-serif; text-transform: uppercase; }
+  .hero h1 span { display: block; color: var(--neon);
+                  text-shadow: 0 0 6px rgba(166,255,46,.9), 0 0 26px rgba(166,255,46,.55), 0 0 60px rgba(166,255,46,.35); }
+  .hero .sub { margin-top: 18px; font: 400 clamp(17px, 2vw, 22px)/1.3 "Russo One", sans-serif; text-transform: uppercase; color: var(--yellow); }
+  .hero .lead { margin-top: 16px; font-size: 19px; color: #e2e3de; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  .chips span { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px; font-size: 15px; font-weight: 600;
+                background: rgba(255,255,255,.06); border: 1px solid var(--line2); }
+  .chips b { color: var(--yellow); }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+  .hero-card { position: relative; aspect-ratio: 4 / 5; border-radius: 24px; overflow: hidden;
+               background: #0b0c0d url("https://i6.photo.2gis.com/photo-gallery/f2adde47-9dca-42ac-968b-0b3a242da8cb.jpg") center 30% / cover no-repeat;
+               box-shadow: 0 0 0 1px rgba(166,255,46,.35), 0 0 50px rgba(166,255,46,.18), 0 40px 80px rgba(0,0,0,.5); }
+  .hero-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(11,12,13,.85)); }
+  .hero-card p { position: absolute; left: 18px; right: 18px; bottom: 16px; z-index: 1; font-size: 15px; font-weight: 600; color: #e9eae5; }
+  .hero-card p b { color: var(--neon); }
+
+  /* Жёлтая полоса с протектором — как графика на их воротах */
+  .band { position: relative; overflow: hidden; background: var(--yellow); color: #141414; }
+  .band::after { content: ""; position: absolute; right: -40px; top: -20px; bottom: -20px; width: 360px; opacity: .14;
+                 background: repeating-linear-gradient(-55deg, #141414 0 22px, transparent 22px 44px); transform: skewX(-10deg); }
+  .band .wrap { position: relative; display: grid; grid-template-columns: auto 1fr; gap: 40px; align-items: center; padding-top: 50px; padding-bottom: 50px; }
+  .band .big { font: 400 clamp(54px, 8vw, 104px)/.9 "Russo One", sans-serif; }
+  .band h2 { font: 400 clamp(24px, 3vw, 36px)/1.1 "Russo One", sans-serif; text-transform: uppercase; }
+  .band p { margin-top: 10px; max-width: 40em; font-weight: 500; }
+
+  /* Услуги */
+  .services { padding: 100px 0; }
+  .svc { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 44px; }
+  .svc div { background: var(--bg2); border: 1px solid var(--line); border-radius: 16px; padding: 26px 24px 28px; position: relative; overflow: hidden; }
+  .svc div::before { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 3px; background: linear-gradient(90deg, var(--neon), var(--yellow)); }
+  .svc svg { width: 34px; height: 34px; color: var(--neon); }
+  .svc b { display: block; margin-top: 14px; font: 400 21px/1.15 "Russo One", sans-serif; text-transform: uppercase; }
+  .svc small { display: block; margin-top: 8px; color: var(--dim); font-size: 15px; line-height: 1.5; }
+  .svc em { display: inline-block; margin-top: 14px; font-style: normal; font-weight: 700; color: #141414; background: var(--yellow); padding: 4px 10px; border-radius: 6px; font-size: 15px; }
+  .note { margin-top: 20px; color: var(--dim); font-size: 15px; }
+
+  /* Галерея */
+  .gallery { padding: 0 0 100px; }
+  .gal { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 260px 260px; gap: 12px; margin-top: 40px; }
+  .gal div { border-radius: 16px; background: var(--bg2) center / cover no-repeat; }
+  .gal div:first-child { grid-row: span 2; }
+
+  /* Зона ожидания */
+  .split { display: grid; grid-template-columns: 1fr 1fr; background: var(--bg2); }
+  .split .photo { min-height: 560px; background: var(--bg3) center / cover no-repeat; }
+  .split .text { padding: 90px clamp(16px, 6vw, 84px); display: flex; flex-direction: column; justify-content: center; }
+  .split .text .lead { margin-top: 22px; }
+  ul.plain { list-style: none; margin-top: 24px; columns: 2; column-gap: 28px; }
+  ul.plain li { padding: 10px 0 10px 26px; border-bottom: 1px solid var(--line); break-inside: avoid; position: relative; font-size: 16px; }
+  ul.plain li::before { content: ""; position: absolute; left: 0; top: 17px; width: 12px; height: 12px; border-radius: 50%; background: var(--neon); box-shadow: 0 0 10px rgba(166,255,46,.7); }
+  .split.rev .photo { order: 2; }
+
+  /* Отзывы */
+  .reviews { padding: 100px 0; }
+  .quotes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 44px; }
+  .quotes blockquote { background: var(--bg2); border: 1px solid var(--line); border-radius: 16px; padding: 28px 28px 24px; font-size: 18px; line-height: 1.55; position: relative; }
+  .quotes blockquote::before { content: "“"; position: absolute; right: 22px; top: 6px; font: 400 80px/1 "Russo One", sans-serif; color: var(--yellow); opacity: .35; }
+  .quotes cite { display: block; margin-top: 14px; font-style: normal; font-weight: 700; font-size: 15px; color: var(--neon); }
+  .rating { display: flex; align-items: center; gap: 18px; margin-top: 30px; color: var(--soft); flex-wrap: wrap; }
+  .rating b { font: 400 54px/1 "Russo One", sans-serif; color: var(--yellow); }
+  .rating a { border-bottom: 1px solid currentColor; }
+
+  /* Запись */
+  .book { padding: 100px 0; background: var(--bg2); position: relative; overflow: hidden; }
+  .book::before { content: ""; position: absolute; left: -120px; bottom: -120px; width: 420px; height: 420px; border-radius: 50%;
+                  background: radial-gradient(circle, rgba(166,255,46,.14), transparent 70%); }
+  .book-grid { position: relative; display: grid; grid-template-columns: 1fr 1.25fr; gap: 56px; align-items: start; }
+  .book .lead { margin-top: 22px; }
+  .steps { margin-top: 28px; display: grid; gap: 14px; }
+  .steps div { display: grid; grid-template-columns: 42px 1fr; gap: 14px; align-items: center; color: var(--soft); }
+  .steps i { font: 400 18px/1 "Russo One", sans-serif; font-style: normal; width: 42px; height: 42px; display: grid; place-items: center;
+             border-radius: 12px; background: var(--yellow); color: #141414; }
+  .form { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 18px; background: var(--bg); border: 1px solid var(--line); border-radius: 20px; padding: 26px; }
+  .form label { display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: var(--dim); }
+  .form .wide { grid-column: 1 / -1; }
+  .form input, .form select, .form textarea { font: 500 17px/1.4 "Golos Text", sans-serif; color: var(--text); background: var(--bg3);
+    border: 2px solid transparent; border-radius: 10px; padding: 12px 14px; outline: none; width: 100%; color-scheme: dark; }
+  .form select option { background: var(--bg2); }
+  .form input:focus, .form select:focus, .form textarea:focus { border-color: var(--neon); }
+  .form textarea { resize: vertical; min-height: 50px; }
+  .checks { display: flex; flex-wrap: wrap; gap: 12px 24px; }
+  .checks label { flex-direction: row; align-items: center; gap: 10px; font-size: 16px; color: var(--text); cursor: pointer; }
+  .checks input { width: 20px; height: 20px; accent-color: var(--neon); padding: 0; }
+  .send { display: flex; flex-wrap: wrap; gap: 10px; }
+  .form-note { font-size: 13px; color: var(--dim); line-height: 1.5; }
+  .form-msg { font-size: 15px; color: var(--yellow); min-height: 1.4em; font-weight: 600; }
+  .form .err input, .form .err select { border-color: var(--red); }
+
+  /* Контакты */
+  .contacts { padding: 100px 0 90px; }
+  .c-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; margin-top: 42px; align-items: start; }
+  .c-row { padding: 16px 0; border-top: 1px solid var(--line); }
+  .c-row small { display: block; color: var(--dim); font-size: 14px; margin-bottom: 4px; }
+  .c-row div { font-size: 19px; font-weight: 600; }
+  .c-row div a { border-bottom: 1px solid var(--line2); }
+  .msg { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  .place { border-radius: 18px; min-height: 380px; background: var(--bg2) center / cover no-repeat; position: relative; overflow: hidden; }
+  .place p { position: absolute; left: 16px; right: 16px; bottom: 16px; background: rgba(17,18,19,.85); border-radius: 12px; padding: 14px 16px; font-size: 15px; color: var(--soft); }
+
+  footer { border-top: 1px solid var(--line); padding: 26px 0 34px; color: var(--dim); font-size: 14px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .mbar { display: none; }
+
+  @media (max-width: 900px) {
+    .burger { display: block; }
+    header nav { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; gap: 0;
+                 padding: 8px 16px 20px; background: rgba(17,18,19,.98); border-bottom: 1px solid var(--line); font-size: 17px; }
+    header nav a { padding: 14px 0; border-bottom: 1px solid var(--line); opacity: 1; }
+    header nav a:last-child { border-bottom: 0; }
+    header.open nav { display: flex; }
+    .hero .wrap { grid-template-columns: minmax(0, 1fr); gap: 30px; min-height: 0; padding-top: 96px; padding-bottom: 56px; }
+    .hero-card { aspect-ratio: 4 / 3; background-position: center 25%; }
+    .band .wrap { grid-template-columns: minmax(0, 1fr); gap: 12px; padding-top: 40px; padding-bottom: 40px; }
+    .svc { grid-template-columns: minmax(0, 1fr); }
+    .gal { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: 220px 160px 160px; }
+    .gal div:first-child { grid-row: auto; grid-column: span 2; }
+    .split, .split.rev { grid-template-columns: minmax(0, 1fr); }
+    .split.rev .photo { order: 0; }
+    .split .photo { min-height: 0; aspect-ratio: 4 / 3; }
+    .split .text { padding: 54px 16px 62px; }
+    ul.plain { columns: 1; }
+    .services, .reviews, .contacts, .book { padding: 70px 0; }
+    .gallery { padding-bottom: 70px; }
+    .quotes { grid-template-columns: minmax(0, 1fr); }
+    .c-grid, .book-grid { grid-template-columns: minmax(0, 1fr); gap: 34px; }
+    .form { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px 12px; padding: 18px; }
+    .send .btn { flex: 1 1 100%; }
+    .place { min-height: 260px; }
+    .mbar { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; position: fixed; inset: auto 0 0; z-index: 10;
+            padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgba(17,18,19,.97); border-top: 1px solid var(--line); }
+    .mbar .btn { padding: 13px 10px; font-size: 13px; }
+    body { padding-bottom: 74px; }
+  }
+  @media (max-width: 480px) { .tel { display: none; } .actions .btn { flex: 1 1 100%; } .hero .lead { font-size: 17px; } }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="car" viewBox="0 0 24 24"><path fill="currentColor" d="M5 11l1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11a2 2 0 0 1 2 2v4h-2v1.5a1.5 1.5 0 0 1-3 0V17H8v1.5a1.5 1.5 0 0 1-3 0V17H3v-4a2 2 0 0 1 2-2zm2.2 0h9.6l-1.1-3.4a.9.9 0 0 0-.9-.6H9.2a.9.9 0 0 0-.9.6zM6.5 15a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm11 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></symbol>
+  <symbol id="tire" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v5M12 16v5M3 12h5M16 12h5"/></g></symbol>
+  <symbol id="bal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v18M5 7h14M5 7l-3 7a3 3 0 0 0 6 0zM19 7l-3 7a3 3 0 0 0 6 0z"/></g></symbol>
+  <symbol id="patch" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="4" transform="rotate(45 12 12)"/><path d="M9 12h6M12 9v6"/></g></symbol>
+  <symbol id="disk" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 12l5-5M12 12l-5-5M12 12v7M12 12l6 3M12 12l-6 3"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></g></symbol>
+  <symbol id="moto" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="16" r="3"/><circle cx="19" cy="16" r="3"/><path d="M5 16l4-6h5l3 6M14 10l2-4h3"/></g></symbol>
+  <symbol id="wrench" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a4 4 0 0 0-5.4 5.2L3 17.8 6.2 21l6.3-6.3a4 4 0 0 0 5.2-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></symbol>
+  <symbol id="wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2s-1 .3-3.4-.7a11.6 11.6 0 0 1-4.5-4c-.3-.5-1.1-1.5-1.1-2.9s.7-2.1 1-2.4a1 1 0 0 1 .8-.4h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .6l-.4.6-.4.4c-.1.2-.3.3-.1.6a8.6 8.6 0 0 0 1.6 2 7.8 7.8 0 0 0 2.3 1.4c.3.2.5.1.6 0l.9-1c.2-.3.4-.2.6-.1l2 .9c.3.1.4.2.5.3a2.3 2.3 0 0 1-.1 1.3z"/></symbol>
+</svg>
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="#" aria-label="Драйв Бум"><i><svg><use href="#car"/></svg></i>Драйв <span>Бум</span></a>
+    <nav>
+      <a href="#services">Услуги</a>
+      <a href="#photos">Фото</a>
+      <a href="#reviews">Отзывы</a>
+      <a href="#book">Запись</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+    <a class="tel" href="tel:+74217315777">31-57-77</a>
+    <button class="burger" type="button" aria-label="Меню" aria-expanded="false"><span></span></button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="kick">Комсомольск-на-Амуре</span>
+      <h1>Драйв <span>Бум</span></h1>
+      <p class="sub">Шиномонтаж и автосервис</p>
+      <p class="lead">Переобуем быстро и аккуратно — по записи, без очереди. Новые станки, чистый бокс и кофе, пока ждёте.</p>
+      <div class="chips">
+        <span><b>9:00–21:00</b> ежедневно</span>
+        <span><b>По записи</b> — без очереди</span>
+        <span><b>5,0</b> в 2ГИС</span>
+      </div>
+      <div class="actions">
+        <a class="btn" href="#book">Записаться онлайн</a>
+        <a class="btn line" href="tel:+74217315777">Позвонить</a>
+      </div>
+    </div>
+    <div class="hero-card"><p><b>Станционная, 2/2</b> — бокс 7, ищите неоновую вывеску</p></div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="big">0 мин</div>
+    <div>
+      <h2>в очереди, если вы записаны</h2>
+      <p>Выберите время на сайте — и приезжайте к нему. Не нужно стоять полдня на холоде: бокс готов, мастер ждёт.</p>
+    </div>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <div class="wrap">
+    <span class="kick">Что делаем</span>
+    <h2 class="h" style="margin-top:14px">Шиномонтаж <span class="y">и не только</span></h2>
+    <div class="svc">
+      <div><svg><use href="#tire"/></svg><b>Сезонная переобувка</b><small>Снимем, поставим, отбалансируем — за один заезд</small><em>комплекс от 1 850 ₽</em></div>
+      <div><svg><use href="#bal"/></svg><b>Балансировка</b><small>На новых станках — без биения на трассе</small></div>
+      <div><svg><use href="#patch"/></svg><b>Ремонт проколов и порезов</b><small>Заклеим и проверим давление</small></div>
+      <div><svg><use href="#disk"/></svg><b>Правка дисков</b><small>Выправим диск после ям</small></div>
+      <div><svg><use href="#moto"/></svg><b>Мотошиномонтаж</b><small>Шины для мотоциклов</small></div>
+      <div><svg><use href="#wrench"/></svg><b>Автосервис</b><small>Колодки, масло, ходовая, двигатель, сварка, кондиционеры</small></div>
+    </div>
+    <p class="note">Цена зависит от радиуса и типа машины — точную стоимость скажем при записи. Продаём и выкупаем б/у шины.</p>
+  </div>
+</section>
+
+<section class="gallery" id="photos">
+  <div class="wrap">
+    <span class="kick">Как у нас</span>
+    <h2 class="h" style="margin-top:14px">Новый бокс <span class="g">и новые станки</span></h2>
+    <div class="gal">
+      <div style="background-image:url('https://i6.photo.2gis.com/photo-gallery/d6466b34-2957-489e-8f23-bbf2fd5bebdb.jpg')"></div>
+      <div style="background-image:url('https://i7.photo.2gis.com/photo-gallery/2bcaa707-fe7c-481c-beef-6cf51b97f07f.jpg')"></div>
+      <div style="background-image:url('https://i7.photo.2gis.com/photo-gallery/a6948ff0-5de2-4ae5-bf11-201abc75ffe3.jpg')"></div>
+      <div style="background-image:url('https://i3.photo.2gis.com/photo-gallery/2b7caf5f-2eb0-40d1-abc6-6a12ba05791e.jpg')"></div>
+      <div style="background-image:url('https://i6.photo.2gis.com/photo-gallery/faac9e6f-f67a-4760-ad26-53742ffa3c2d.jpg');background-position:center 30%"></div>
+    </div>
+  </div>
+</section>
+
+<section class="split">
+  <div class="photo" style="background-image:url('https://i9.photo.2gis.com/photo-gallery/6db1aeee-4d70-4775-aa6a-dbae42e5c207.jpg')"></div>
+  <div class="text">
+    <span class="kick">Пока ждёте</span>
+    <h2 class="h" style="margin-top:14px">Тепло, чисто <span class="y">и кофе</span></h2>
+    <p class="lead">Не нужно мёрзнуть на улице, пока меняют колёса. Есть зона ожидания с мягким диваном и телевизором — можно посидеть и выпить кофе.</p>
+    <ul class="plain">
+      <li>Зона ожидания</li>
+      <li>Кофе</li>
+      <li>Свежий ремонт</li>
+      <li>Новое оборудование</li>
+      <li>Оплата картой и по QR</li>
+      <li>Наличные и перевод</li>
+    </ul>
+  </div>
+</section>
+
+<section class="reviews" id="reviews">
+  <div class="wrap">
+    <span class="kick">Отзывы из 2ГИС</span>
+    <h2 class="h" style="margin-top:14px">Что говорят <span class="g">клиенты</span></h2>
+    <div class="quotes">
+      <blockquote>Шиномонтаж по записи — не надо полдня в очереди стоять. Ко времени приехал и быстро всё сделали. Помещение с новым ремонтом, хорошие новые станки, сотрудники вежливые.<cite>Александр</cite></blockquote>
+      <blockquote>Чистенько, приятно зайти. Клиентоориентированность 10/10. Мой автомобиль переобувал Евгений — работу свою знает, нашёл проблему в колесе и сделал.<cite>Ирина</cite></blockquote>
+      <blockquote>Переобували две семейные машины и остались довольны. Чисто, современное оборудование и забота о клиенте в месте ожидания.<cite>Татьяна</cite></blockquote>
+      <blockquote>Быстро переобули на зиму. Есть зона, где можно посидеть, подождать, выпить кофе. Приемлемые цены за такое обслуживание.<cite>Екатерина</cite></blockquote>
+    </div>
+    <div class="rating"><b>5,0</b><span>40 оценок в <a href="https://2gis.ru/komsomolsk/firm/70000001113492967/tab/reviews" target="_blank" rel="noopener">2ГИС</a></span></div>
+  </div>
+</section>
+
+<section class="book" id="book">
+  <div class="wrap book-grid">
+    <div>
+      <span class="kick">Онлайн-запись</span>
+      <h2 class="h" style="margin-top:14px">Запишитесь <span class="y">без звонка</span></h2>
+      <p class="lead">Заполните форму — заявка уйдёт нам в WhatsApp, мы подтвердим время. Работаем каждый день с 9:00 до 21:00.</p>
+      <div class="steps">
+        <div><i>1</i><span>Укажите машину, радиус и что нужно сделать</span></div>
+        <div><i>2</i><span>Выберите день и время</span></div>
+        <div><i>3</i><span>Приезжайте ко времени — без очереди</span></div>
+      </div>
+    </div>
+    <form class="form" id="bookForm" novalidate>
+      <label class="wide">Что нужно
+        <select name="service">
+          <option>Сезонная переобувка</option><option>Шиномонтаж + балансировка</option><option>Ремонт прокола / пореза</option>
+          <option>Правка диска</option><option>Мотошиномонтаж</option><option>Автосервис (колодки, масло, ходовая)</option><option>Другое</option>
+        </select>
+      </label>
+      <label>Машина<input type="text" name="car" placeholder="Toyota Camry" required></label>
+      <label>Радиус
+        <select name="radius"><option>R13</option><option>R14</option><option>R15</option><option selected>R16</option><option>R17</option><option>R18</option><option>R19</option><option>R20</option><option>R21</option><option>R22</option><option>Не знаю</option></select>
+      </label>
+      <label>Дата<input type="date" name="date" required></label>
+      <label>Время<select name="time" required><option value="">Выберите</option></select></label>
+      <div class="wide checks">
+        <label><input type="checkbox" data-t="колёса на дисках"> Колёса на дисках</label>
+        <label><input type="checkbox" data-t="нужна балансировка"> Нужна балансировка</label>
+        <label><input type="checkbox" data-t="кроссовер / внедорожник"> Кроссовер / внедорожник</label>
+      </div>
+      <label>Имя<input type="text" name="name" autocomplete="given-name" required></label>
+      <label>Телефон<input type="tel" name="phone" autocomplete="tel" placeholder="+7" required></label>
+      <label class="wide">Комментарий<textarea name="comment" rows="1" placeholder="Например: низкий профиль, приеду после работы"></textarea></label>
+      <div class="wide send">
+        <button class="btn" type="submit"><svg><use href="#wa"/></svg>Записаться через WhatsApp</button>
+        <a class="btn line" href="tel:+74217315777">Позвонить</a>
+      </div>
+      <p class="wide form-msg" id="formMsg" role="status"></p>
+      <p class="wide form-note">Нажимая кнопку, вы соглашаетесь на обработку имени и телефона для записи. Данные уходят только нам.</p>
+    </form>
+  </div>
+</section>
+
+<section class="contacts" id="contacts">
+  <div class="wrap">
+    <span class="kick">Контакты</span>
+    <h2 class="h" style="margin-top:14px">Как нас <span class="y">найти</span></h2>
+    <div class="c-grid">
+      <div>
+        <div class="c-row"><small>Адрес</small><div>Станционная улица, 2/2, бокс 7</div></div>
+        <div class="c-row"><small>Режим работы</small><div>Ежедневно, 9:00–21:00</div></div>
+        <div class="c-row"><small>Телефоны</small><div><a href="tel:+74217315777">31-57-77</a> · <a href="tel:+79638215777">+7 963 821-57-77</a></div></div>
+        <div class="c-row"><small>Оплата</small><div>Карта, наличные, перевод, QR-код</div></div>
+        <div class="msg">
+          <a class="btn" href="https://wa.me/79242235757" target="_blank" rel="noopener"><svg><use href="#wa"/></svg>WhatsApp</a>
+          <a class="btn line" href="https://t.me/+79638215777" target="_blank" rel="noopener">Telegram</a>
+        </div>
+        <p style="margin-top:24px"><a class="btn line" href="https://2gis.ru/komsomolsk/firm/70000001113492967" target="_blank" rel="noopener">Маршрут в 2ГИС</a></p>
+      </div>
+      <div class="place" style="background-image:url('https://i9.photo.2gis.com/photo-gallery/1448c90e-b294-4910-805d-8cc05d29ce33.jpg')">
+        <p>Центральный округ, рядом с остановкой «Хладокомбинат». Ищите тёмные ворота с вывеской «Шиномонтаж» — бокс 7.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© Драйв Бум</span>
+    <span>Комсомольск-на-Амуре, Станционная, 2/2 · 9:00–21:00</span>
+  </div>
+</footer>
+
+<div class="mbar">
+  <a class="btn" href="#book">Записаться</a>
+  <a class="btn line" href="tel:+74217315777">Позвонить</a>
+</div>
+
+<script>
+(function () {
+  const header = document.querySelector("header"), burger = header.querySelector(".burger");
+  const onScroll = () => header.classList.toggle("solid", window.scrollY > 40);
+  window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+  const setOpen = (v) => { header.classList.toggle("open", v); burger.setAttribute("aria-expanded", v); };
+  burger.addEventListener("click", () => setOpen(!header.classList.contains("open")));
+  header.querySelectorAll("nav a").forEach((a) => a.addEventListener("click", () => setOpen(false)));
+})();
+// Заявка уходит в WhatsApp мастерской готовым сообщением.
+(function () {
+  const WA_PHONE = "79242235757";
+  const form = document.getElementById("bookForm"), msg = document.getElementById("formMsg"), f = form.elements;
+  const pad = (n) => String(n).padStart(2, "0"), today = new Date();
+  f.date.min = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
+  for (let h = 9; h < 21; h++) for (const m of ["00", "30"]) f.time.add(new Option(`${pad(h)}:${m}`));
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let ok = true;
+    [f.car, f.date, f.time, f.name, f.phone].forEach((el) => {
+      const bad = !el.value.trim() || (el === f.phone && el.value.replace(/\D/g, "").length < 10);
+      el.closest("label").classList.toggle("err", bad); if (bad) ok = false;
+    });
+    if (!ok) { msg.textContent = "Заполните машину, дату, время, имя и телефон."; return; }
+    const [y, m, d] = f.date.value.split("-");
+    const extras = [...form.querySelectorAll(".checks input:checked")].map((i) => i.dataset.t);
+    const text = [
+      "Здравствуйте! Хочу записаться в «Драйв Бум» (заявка с сайта).",
+      `Услуга: ${f.service.value}`,
+      `Машина: ${f.car.value.trim()}, радиус ${f.radius.value}`,
+      `Когда: ${d}.${m}.${y}, ${f.time.value}`,
+      extras.length ? `Дополнительно: ${extras.join(", ")}` : "",
+      `Имя: ${f.name.value.trim()}`, `Телефон: ${f.phone.value.trim()}`,
+      f.comment.value.trim() ? `Комментарий: ${f.comment.value.trim()}` : "",
+    ].filter(Boolean).join("\n");
+    window.open(`https://wa.me/${WA_PHONE}?text=${encodeURIComponent(text)}`, "_blank", "noopener");
+    msg.textContent = "Открываем WhatsApp — осталось нажать «Отправить».";
+  });
+})();
+</script>
+</body>
+</html>
