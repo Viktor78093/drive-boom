@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Расписание</title>
+<style>
+  :root { --a: #ffd60a; --oa: #141414; --bg: #111213; --card: #1b1d1f; --tx: #f3f3ef; --dim: #9a9a95; --ln: rgba(255,255,255,.12); --red: #ff5a52; --green: #5bd16a; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--tx); font: 16px/1.45 -apple-system, system-ui, "Segoe UI", Roboto, sans-serif; padding-bottom: 90px; }
+  .top { position: sticky; top: 0; z-index: 5; background: rgba(17,18,19,.97); border-bottom: 1px solid var(--ln); padding: 12px 16px; }
+  .top h1 { font-size: 18px; } .top small { color: var(--dim); }
+  .days { display: flex; gap: 8px; overflow-x: auto; padding: 12px 16px 4px; }
+  .day { flex: none; min-width: 62px; padding: 8px 6px; border-radius: 12px; border: 2px solid var(--ln); background: none; color: var(--tx); text-align: center; font: inherit; cursor: pointer; position: relative; }
+  .day b { display: block; font-size: 19px; } .day small { display: block; font-size: 11px; color: var(--dim); }
+  .day i { position: absolute; top: -6px; right: -6px; min-width: 20px; height: 20px; border-radius: 10px; background: var(--a); color: var(--oa); font: 700 12px/20px sans-serif; font-style: normal; padding: 0 5px; }
+  .day[aria-pressed=true] { background: var(--a); color: var(--oa); border-color: var(--a); } .day[aria-pressed=true] small { color: var(--oa); }
+  main { padding: 12px 16px; max-width: 720px; margin: 0 auto; }
+  .stat { display: flex; gap: 14px; color: var(--dim); font-size: 14px; margin: 6px 0 12px; flex-wrap: wrap; }
+  .stat b { color: var(--tx); }
+  .row { display: grid; grid-template-columns: 62px 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid var(--ln); }
+  .row .t { font-weight: 800; font-size: 18px; font-variant-numeric: tabular-nums; } .row .t small { display: block; font-size: 12px; color: var(--dim); font-weight: 500; }
+  .free .t { color: var(--dim); font-weight: 600; } .free .who { color: var(--dim); }
+  .bk { background: var(--card); border: 1px solid var(--ln); border-left: 4px solid var(--a); border-radius: 12px; padding: 10px 12px; }
+  .bk.cancel { opacity: .45; border-left-color: var(--dim); text-decoration: line-through; }
+  .bk.donee { border-left-color: var(--green); }
+  .bk h3 { font-size: 16px; } .bk p { font-size: 14px; color: var(--dim); }
+  .bk .tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 6px; background: rgba(255,214,10,.15); color: var(--a); margin-left: 6px; vertical-align: 2px; }
+  .acts { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .acts a, .acts button { font: 600 13px/1 sans-serif; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--ln); background: none; color: var(--tx); cursor: pointer; text-decoration: none; }
+  .acts .wa { background: #25d366; border-color: #25d366; color: #0b2b16; }
+  .acts .x { color: var(--red); }
+  .fab { position: fixed; left: 16px; right: 16px; bottom: 16px; max-width: 688px; margin: 0 auto; padding: 16px; border: 0; border-radius: 14px; background: var(--a); color: var(--oa); font: 800 16px/1 sans-serif; text-transform: uppercase; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+  .modal { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: none; align-items: flex-end; justify-content: center; z-index: 10; }
+  .modal.on { display: flex; }
+  .sheet { background: var(--card); width: 100%; max-width: 720px; border-radius: 18px 18px 0 0; padding: 18px 16px 24px; }
+  .sheet h2 { font-size: 18px; margin-bottom: 12px; }
+  .f { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .f label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--dim); } .f .w { grid-column: 1 / -1; }
+  input, select { font: inherit; color: var(--tx); background: var(--bg); border: 2px solid transparent; border-radius: 10px; padding: 11px 12px; width: 100%; color-scheme: dark; }
+  input:focus, select:focus { outline: none; border-color: var(--a); }
+  .btn { width: 100%; margin-top: 14px; padding: 15px; border: 0; border-radius: 12px; background: var(--a); color: var(--oa); font: 800 15px/1 sans-serif; text-transform: uppercase; cursor: pointer; }
+  .btn.ln { background: none; color: var(--tx); border: 2px solid var(--ln); margin-top: 8px; }
+  .msg { color: var(--a); font-weight: 600; margin-top: 10px; min-height: 1.2em; }
+  .login { max-width: 360px; margin: 18vh auto 0; padding: 0 16px; text-align: center; } .login h1 { font-size: 24px; margin-bottom: 8px; } .login p { color: var(--dim); margin-bottom: 16px; }
+  .empty { color: var(--dim); padding: 20px 0; text-align: center; }
+  .help { position: absolute; right: 16px; top: 12px; width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--ln); background: none; color: var(--tx); font: 800 18px/1 sans-serif; cursor: pointer; }
+  .top { position: sticky; } .top { position: relative; }
+  .tour-dim { position: fixed; inset: 0; z-index: 50; pointer-events: auto; }
+  .tour-hole { position: fixed; z-index: 51; border-radius: 14px; box-shadow: 0 0 0 9999px rgba(0,0,0,.72), 0 0 0 3px var(--a); transition: all .25s; pointer-events: none; }
+  .tour-card { position: fixed; left: 16px; right: 16px; z-index: 52; max-width: 520px; margin: 0 auto; background: var(--card); border: 1px solid var(--ln); border-radius: 16px; padding: 16px; box-shadow: 0 20px 50px rgba(0,0,0,.5); }
+  .tour-card .n { font-size: 12px; color: var(--dim); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .tour-card h3 { font-size: 19px; margin: 6px 0; } .tour-card p { color: #d6d6d1; font-size: 15px; }
+  .tour-card .bt { display: flex; gap: 8px; margin-top: 14px; }
+  .tour-card .bt button { flex: 1; padding: 12px; border-radius: 10px; border: 0; font: 800 14px/1 sans-serif; cursor: pointer; }
+  .tour-card .go { background: var(--a); color: var(--oa); } .tour-card .sk { background: none; color: var(--dim); border: 2px solid var(--ln) !important; }
+  .steps { text-align: left; margin: 18px 0; display: grid; gap: 10px; color: #d6d6d1; font-size: 15px; }
+  .steps div { display: grid; grid-template-columns: 30px 1fr; gap: 10px; align-items: start; }
+  .steps i { font-style: normal; width: 30px; height: 30px; border-radius: 8px; background: var(--a); color: var(--oa); display: grid; place-items: center; font-weight: 800; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* Расписание для владельца. Адрес сервера — тот же, что в настройках сайта (window.BOOKING.endpoint),
+   его можно указать здесь или передать через ?e=… один раз (запоминается в этом телефоне). */
+var ENDPOINT = "";
+var DEMO = true;   // true — показать «Расписание» с примерными записями (пароль 1234), без таблицы
+var DEMO_NAME = "Драйв Бум";
+(function () {
+  var qs = new URLSearchParams(location.search);
+  try { if (qs.get("e")) localStorage.setItem("bk_endpoint", qs.get("e")); ENDPOINT = ENDPOINT || localStorage.getItem("bk_endpoint") || ""; } catch (e) {}
+  var KEY = ""; try { KEY = localStorage.getItem("bk_key") || ""; } catch (e) {}
+  var app = document.getElementById("app"), WD = ["Вс","Пн","Вт","Ср","Чт","Пт","Сб"], MON = ["янв","фев","мар","апр","мая","июн","июл","авг","сен","окт","ноя","дек"];
+  var S = { date: null, list: [], settings: null, services: [], today: null };
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function add(d, n) { var p = d.split("-"), x = new Date(+p[0], +p[1] - 1, +p[2] + n); return x.getFullYear() + "-" + pad(x.getMonth() + 1) + "-" + pad(x.getDate()); }
+  function esc(s) { return String(s || "").replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function api(body) {
+    body.key = KEY;
+    if (DEMO) return Promise.resolve(demoApi(body));
+    return fetch(ENDPOINT, { method: "POST", body: JSON.stringify(body) }).then(function (r) { return r.json(); });
+  }
+  // ---------- демо: примерные записи в этом телефоне ----------
+  function demoApi(b) {
+    if (b.key !== "1234") return { ok: false, error: "В демо пароль 1234" };
+    var now = new Date(), td = now.getFullYear() + "-" + pad(now.getMonth() + 1) + "-" + pad(now.getDate());
+    var hours = {}; for (var i = 0; i < 7; i++) hours[i] = ["09:00", "21:00"];
+    var st = { name: DEMO_NAME || "Расписание (демо)", step: 30, capacity: 1, days: 14, lead: 30, hours: hours };
+    var sv = [{ name: "Сезонная переобувка", dur: 60 }, { name: "Шиномонтаж + балансировка", dur: 60 }, { name: "Ремонт прокола / пореза", dur: 30 }, { name: "Правка диска", dur: 60 }, { name: "Автосервис (колодки, масло, ходовая)", dur: 90 }];
+    var list; try { list = JSON.parse(localStorage.getItem("bk_demo_admin") || "null"); } catch (e) {}
+    if (!list || !list.length || list[0].seed !== td) {
+      var t1 = add(td, 1), mk = function (d, t, dur, s, det, n, ph, src, stt) { return { id: Math.random().toString(16).slice(2, 10), d: d, t: t, dur: dur, service: s, details: det, name: n, phone: ph, comment: "", status: stt || "подтверждена", source: src || "вручную" }; };
+      list = [mk(td, "10:00", 60, "Сезонная переобувка", "Haval Jolion, R18", "Олег", "+79140000001", "сайт", "новая"),
+              mk(td, "12:30", 30, "Ремонт прокола / пореза", "Lada Vesta, R15", "Дмитрий", "+79140000002"),
+              mk(td, "15:00", 60, "Сезонная переобувка", "Toyota RAV4, R17", "Наталья", "+79140000003", "сайт"),
+              mk(t1, "09:00", 60, "Шиномонтаж + балансировка", "Mazda CX-5, R19", "Алексей", "+79140000004", "сайт", "новая"),
+              mk(t1, "11:00", 90, "Автосервис (колодки, масло, ходовая)", "Nissan X-Trail", "Игорь", "+79140000005"),
+              mk(t1, "17:30", 60, "Сезонная переобувка", "Honda Fit, R14", "Ольга", "+79140000006", "сайт")];
+      list[0].seed = td;
+    }
+    var save = function () { try { localStorage.setItem("bk_demo_admin", JSON.stringify(list)); } catch (e) {} };
+    if (b.action === "list") { save(); return { ok: true, today: td, settings: st, services: sv, list: list.filter(function (x) { return (!b.from || x.d >= b.from) && (!b.to || x.d <= b.to); }).sort(function (x, y) { return (x.d + x.t) < (y.d + y.t) ? -1 : 1; }) }; }
+    if (b.action === "add") { list.push({ id: Math.random().toString(16).slice(2, 10), d: b.d, t: b.t, dur: b.dur, service: b.service, details: b.details, name: b.name, phone: b.phone, comment: "", status: "подтверждена", source: "вручную" }); save(); return { ok: true }; }
+    if (b.action === "status") { list.forEach(function (x) { if (x.id === b.id) x.status = b.status; }); save(); return { ok: true }; }
+    return { ok: false, error: "?" };
+  }
+  function toMin(t) { var p = t.split(":"); return +p[0] * 60 + +p[1]; }
+  function hhmm(m) { return pad(Math.floor(m / 60) % 24) + ":" + pad(m % 60); }
+
+  function login(err) {
+    var first = !localStorage.getItem("bk_tour");
+    app.innerHTML = '<div class="login"><h1>' + (first ? "Добро пожаловать 👋" : "Расписание") + '</h1>' +
+      (first ? '<p>Это ваше расписание: все записи с сайта и по телефону — в одном месте, вместо тетрадки.</p><div class="steps">' +
+        '<div><i>1</i><span>Введите пароль — он в вашей Google Таблице, лист «Настройки», строка «Пароль расписания».</span></div>' +
+        '<div><i>2</i><span>Покажу, где что, — займёт минуту.</span></div>' +
+        '<div><i>3</i><span>Добавьте расписание на экран телефона — будет открываться как приложение.</span></div></div>'
+        : '<p>Введите пароль из таблицы, лист «Настройки».</p>') +
+      (DEMO ? '<p style="color:var(--a)">Демо-версия: пароль <b>1234</b>. Записи примерные, сохраняются только в этом телефоне.</p>' : ENDPOINT ? "" : '<p style="color:#ff5a52">Не указан адрес сервера. Откройте ссылку, которую прислал Виктор.</p>') +
+      '<input id="pw" type="password" inputmode="numeric" placeholder="Пароль"><button class="btn" id="go">Войти</button><p class="msg">' + esc(err) + "</p></div>";
+    document.getElementById("go").onclick = function () { KEY = document.getElementById("pw").value.trim(); try { localStorage.setItem("bk_key", KEY); } catch (e) {} load(); };
+  }
+
+  function load() {
+    var from = S.date ? add(S.date, -7) : null;
+    api({ action: "list", from: S.today ? S.today : undefined, to: S.today ? add(S.today, 30) : undefined }).then(function (r) {
+      if (!r.ok) { KEY = ""; try { localStorage.removeItem("bk_key"); } catch (e) {} return login(r.error); }
+      S.settings = r.settings; S.services = r.services; S.today = S.today || r.today;
+      if (!S.date) S.date = S.today;
+      return api({ action: "list", from: S.today, to: add(S.today, Math.max(14, r.settings.days)) }).then(function (r2) {
+        S.list = r2.list || []; render();
+        var seen = false; try { seen = !!localStorage.getItem("bk_tour"); } catch (e) {}
+        if (!seen && !window.NO_TOUR) setTimeout(tour, 400);
+      });
+    }).catch(function () { app.innerHTML = '<div class="login"><h1>Нет связи</h1><p>Проверьте интернет и обновите страницу.</p></div>'; });
+  }
+
+  function render() {
+    var st = S.settings, days = "", n = Math.max(14, st.days);
+    for (var i = 0; i <= n; i++) {
+      var d = add(S.today, i), p = d.split("-"), c = S.list.filter(function (b) { return b.d === d && b.status !== "отменена"; }).length;
+      var wd = new Date(+p[0], +p[1] - 1, +p[2]).getDay();
+      days += '<button class="day" data-d="' + d + '" aria-pressed="' + (d === S.date) + '"><small>' + (i === 0 ? "сегодня" : WD[wd]) + "</small><b>" + +p[2] + "</b><small>" + MON[+p[1] - 1] + "</small>" + (c ? "<i>" + c + "</i>" : "") + "</button>";
+    }
+    var p2 = S.date.split("-"), wd2 = new Date(+p2[0], +p2[1] - 1, +p2[2]).getDay(), hrs = st.hours[wd2];
+    var dayList = S.list.filter(function (b) { return b.d === S.date; });
+    var live = dayList.filter(function (b) { return b.status !== "отменена"; });
+    var body = "";
+    if (!hrs) body = '<p class="empty">Выходной день.</p>' + dayList.map(card).join("");
+    else {
+      var open = toMin(hrs[0]), close = toMin(hrs[1]) || 1440;
+      for (var m = open; m < close; m += st.step) {
+        var t = hhmm(m), here = dayList.filter(function (b) { return b.t === t; });
+        var covered = live.some(function (b) { var s = toMin(b.t); return s < m && m < s + b.dur; });
+        if (here.length) body += '<div class="row"><div class="t">' + t + "</div><div>" + here.map(card).join('<div style="height:8px"></div>') + "</div></div>";
+        else if (!covered) body += '<div class="row free"><div class="t">' + t + '</div><div class="who">свободно</div></div>';
+      }
+    }
+    app.innerHTML = '<div class="top"><h1>' + esc(st.name || "Расписание") + '</h1><small>Записи с сайта и добавленные вручную</small><button class="help" id="help" aria-label="Обучение">?</button></div>' +
+      '<div class="days">' + days + "</div><main><div class=\"stat\"><span>Записей: <b>" + live.length + "</b></span>" +
+      (hrs ? "<span>Работаем: <b>" + hrs[0] + "–" + hrs[1] + "</b></span>" : "") + '<span><a href="#" id="rf" style="color:var(--a)">обновить</a></span></div>' + body + "</main>" +
+      '<button class="fab" id="addb">+ Добавить запись</button><div class="modal" id="m"></div>';
+  }
+  function card(b) {
+    var ph = String(b.phone || "").replace(/\D/g, ""); if (ph.length === 11 && ph[0] === "8") ph = "7" + ph.slice(1);
+    var cls = b.status === "отменена" ? " cancel" : b.status === "выполнена" ? " donee" : "";
+    return '<div class="bk' + cls + '"><h3>' + esc(b.name || "Без имени") + (b.source === "сайт" ? '<span class="tag">сайт</span>' : "") +
+      (b.status === "новая" ? '<span class="tag">новая</span>' : "") + "</h3><p>" + esc(b.service) + " · " + b.dur + " мин" + (b.details ? "<br>" + esc(b.details) : "") +
+      (b.comment ? "<br>«" + esc(b.comment) + "»" : "") + "</p>" + (b.status === "отменена" ? "" :
+      '<div class="acts">' + (ph ? '<a href="tel:+' + ph + '">Позвонить</a><a class="wa" href="https://wa.me/' + ph + '" target="_blank">WhatsApp</a>' : "") +
+      (b.status !== "выполнена" ? '<button data-s="выполнена" data-id="' + b.id + '">Готово</button>' : "") +
+      '<button class="x" data-s="отменена" data-id="' + b.id + '">Отменить</button></div>') + "</div>";
+  }
+  function addForm() {
+    var m = document.getElementById("m"), times = "", st = S.settings;
+    for (var t = 0; t < 1440; t += st.step) times += "<option>" + hhmm(t) + "</option>";
+    m.innerHTML = '<div class="sheet"><h2>Запись по телефону</h2><div class="f">' +
+      '<label>Дата<input id="ad" type="date" value="' + S.date + '"></label><label>Время<select id="at">' + times + "</select></label>" +
+      '<label class="w">Услуга<select id="as">' + S.services.map(function (s, i) { return '<option value="' + i + '">' + esc(s.name) + " · " + s.dur + " мин</option>"; }).join("") + "</select></label>" +
+      '<label>Имя<input id="an"></label><label>Телефон<input id="ap" type="tel" placeholder="+7"></label>' +
+      '<label class="w">Машина / детали<input id="ax" placeholder="Camry R17"></label></div>' +
+      '<button class="btn" id="asv">Сохранить</button><button class="btn ln" id="acl">Отмена</button><p class="msg" id="amsg"></p></div>';
+    m.classList.add("on");
+    var first = S.list.length ? null : null; document.getElementById("at").value = S.settings.hours[new Date().getDay()] ? S.settings.hours[new Date().getDay()][0] : "09:00";
+    document.getElementById("acl").onclick = function () { m.classList.remove("on"); };
+    document.getElementById("asv").onclick = function () {
+      var sv = S.services[+document.getElementById("as").value] || { name: "", dur: st.step };
+      api({ action: "add", d: document.getElementById("ad").value, t: document.getElementById("at").value, dur: sv.dur, service: sv.name,
+            name: document.getElementById("an").value, phone: document.getElementById("ap").value, details: document.getElementById("ax").value })
+        .then(function (r) { if (!r.ok) { document.getElementById("amsg").textContent = r.error; return; } S.date = document.getElementById("ad").value; m.classList.remove("on"); load(); });
+    };
+  }
+  // ---------- обучение при первом входе ----------
+  function tour() {
+    var day = S.list.filter(function (b) { return b.status !== "отменена"; }).map(function (b) { return b.d; }).sort()[0];
+    if (day && day !== S.date) { S.date = day; render(); }
+    var steps = [
+      { h: "Это ваше расписание", p: "Здесь все записи: те, что клиенты сделали сами на сайте, и те, что вы добавите по звонку. Покажу за минуту, где что." },
+      { sel: ".days", h: "Дни", p: "Листайте вбок. Цифра в кружке — сколько записей в этот день. Нажмите на день — откроется его расписание." },
+      { sel: ".row .bk", h: "Запись", p: "Имя, услуга, машина и сколько минут займёт. Метка «сайт» — клиент записался сам. «Новая» — вы её ещё не отметили." },
+      { sel: ".row .bk .acts", h: "Кнопки записи", p: "«Позвонить» и «WhatsApp» — связаться в одно нажатие. «Готово» — когда сделали. «Отменить» — время снова станет свободным на сайте." },
+      { sel: ".row.free", h: "Свободное время", p: "Такое окошко клиент может занять на сайте. Как только кто-то запишется — оно пропадёт у всех." },
+      { sel: "#addb", h: "Позвонили по телефону?", p: "Жмите «Добавить запись» и внесите её — время сразу закроется на сайте, и двое на одно время не приедут." },
+      { sel: "#rf", h: "Обновить", p: "Расписание обновляется само раз в минуту. Хотите прямо сейчас — нажмите «обновить»." },
+      { sel: "#help", h: "Если забыли", p: "Нажмите «?» — покажу всё заново." },
+      { h: "Последний шаг: на экран телефона", p: "iPhone: внизу «Поделиться» → «На экран „Домой“». Android: меню ⋮ → «Добавить на главный экран». Расписание будет открываться как приложение, пароль вводить больше не нужно." }
+    ].filter(function (st) { return !st.sel || document.querySelector(st.sel); });
+    var i = 0, dim = document.createElement("div"), hole = document.createElement("div"), card = document.createElement("div");
+    dim.className = "tour-dim"; hole.className = "tour-hole"; card.className = "tour-card";
+    document.body.append(dim, hole, card);
+    function end() { dim.remove(); hole.remove(); card.remove(); try { localStorage.setItem("bk_tour", "1"); } catch (e) {} }
+    function show() {
+      var st = steps[i], el = st.sel && document.querySelector(st.sel);
+      if (el) { el.scrollIntoView({ block: "center" }); var r = el.getBoundingClientRect();
+        hole.style.cssText = "display:block;left:" + (r.left - 6) + "px;top:" + (r.top - 6) + "px;width:" + (r.width + 12) + "px;height:" + (r.height + 12) + "px";
+        var below = r.top < innerHeight / 2; card.style.top = below ? Math.min(innerHeight - 230, r.bottom + 18) + "px" : ""; card.style.bottom = below ? "" : (innerHeight - r.top + 18) + "px";
+      } else { hole.style.cssText = "display:block;left:50%;top:50%;width:0;height:0"; card.style.top = "30%"; card.style.bottom = ""; }
+      card.innerHTML = '<div class="n">Шаг ' + (i + 1) + " из " + steps.length + "</div><h3>" + st.h + "</h3><p>" + st.p + '</p><div class="bt">' +
+        (i < steps.length - 1 ? '<button class="sk">Пропустить</button><button class="go">Дальше</button>' : '<button class="go">Понятно 👍</button>') + "</div>";
+      card.querySelector(".go").onclick = function () { if (++i >= steps.length) end(); else show(); };
+      var sk = card.querySelector(".sk"); if (sk) sk.onclick = end;
+    }
+    show();
+  }
+
+  app.addEventListener("click", function (e) {
+    var b = e.target.closest("button,a"); if (!b) return;
+    if (b.dataset.d) { S.date = b.dataset.d; render(); }
+    else if (b.dataset.s) { if (b.dataset.s === "отменена" && !confirm("Отменить запись?")) return; api({ action: "status", id: b.dataset.id, status: b.dataset.s }).then(load); }
+    else if (b.id === "addb") addForm();
+    else if (b.id === "rf") { e.preventDefault(); load(); }
+    else if (b.id === "help") tour();
+  });
+  if ((!ENDPOINT && !DEMO) || !KEY) login(""); else load();
+  setInterval(function () { if (KEY && (ENDPOINT || DEMO) && !document.getElementById("m")?.classList.contains("on")) load(); }, 60000);
+})();
+</script>
+</body>
+</html>
