@@ -7,6 +7,8 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Драйв Бум — шиномонтаж и автосервис по записи, Комсомольск-на-Амуре</title>
 <meta name="description" content="Шиномонтаж и автосервис «Драйв Бум» на Станционной, 2/2. Запись онлайн без очереди, ежедневно 9:00–21:00. Комсомольск-на-Амуре.">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -48,9 +50,12 @@
   header.solid, header.open { background: rgba(17,18,19,.96); padding: 10px 0; border-bottom-color: var(--line); backdrop-filter: blur(8px); }
   header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
   .logo { display: flex; align-items: center; gap: 12px; font: 400 21px/1 "Russo One", sans-serif; text-transform: uppercase; }
+  .logo img { width: 72px; height: 72px; transition: width .25s, height .25s; flex: none; filter: drop-shadow(0 0 10px rgba(166,255,46,.45)); }
   .logo i { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; flex: none;
             background: radial-gradient(circle, var(--red) 0 44%, #fff 46% 52%, var(--neon) 54% 100%); box-shadow: 0 0 18px rgba(166,255,46,.45); }
   .logo i svg { width: 18px; height: 18px; color: #fff; }
+  header.solid .logo img, header.open .logo img { width: 52px; height: 52px; }
+  .logo { font-size: 24px; }
   .logo span { color: var(--neon); text-shadow: 0 0 14px rgba(166,255,46,.55); }
   header nav { display: flex; gap: 26px; font-size: 15px; font-weight: 600; }
   header nav a { opacity: .85; } header nav a:hover { opacity: 1; color: var(--yellow); }
@@ -67,7 +72,7 @@
           radial-gradient(700px 500px at 78% 40%, rgba(166,255,46,.12), transparent 70%),
           radial-gradient(500px 400px at 10% 90%, rgba(255,214,10,.08), transparent 70%), var(--bg); }
   .hero .wrap { position: relative; display: grid; grid-template-columns: 1.15fr .85fr; gap: 56px; align-items: center;
-                min-height: 100svh; padding-top: 110px; padding-bottom: 70px; }
+                min-height: 100svh; padding-top: 130px; padding-bottom: 70px; }
   .hero h1 { margin-top: 18px; font: 400 clamp(56px, 8.6vw, 124px)/.9 "Russo One", sans-serif; text-transform: uppercase; }
   .hero h1 span { display: block; color: var(--neon);
                   text-shadow: 0 0 6px rgba(166,255,46,.9), 0 0 26px rgba(166,255,46,.55), 0 0 60px rgba(166,255,46,.35); }
@@ -82,6 +87,8 @@
                background: #0b0c0d url("https://i6.photo.2gis.com/photo-gallery/f2adde47-9dca-42ac-968b-0b3a242da8cb.jpg") center 30% / cover no-repeat;
                box-shadow: 0 0 0 1px rgba(166,255,46,.35), 0 0 50px rgba(166,255,46,.18), 0 40px 80px rgba(0,0,0,.5); }
   .hero-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(11,12,13,.85)); }
+  .hero-logo { position: absolute; right: -38px; top: -38px; width: 150px; height: 150px; z-index: 2; filter: drop-shadow(0 10px 30px rgba(0,0,0,.6)) drop-shadow(0 0 18px rgba(166,255,46,.35)); }
+  .hero-card { overflow: visible; } .hero-card::after { border-radius: 24px; }
   .hero-card p { position: absolute; left: 18px; right: 18px; bottom: 16px; z-index: 1; font-size: 15px; font-weight: 600; color: #e9eae5; }
   .hero-card p b { color: var(--neon); }
 
@@ -181,6 +188,8 @@
     header.open nav { display: flex; }
     .hero .wrap { grid-template-columns: minmax(0, 1fr); gap: 30px; min-height: 0; padding-top: 96px; padding-bottom: 56px; }
     .hero-card { aspect-ratio: 4 / 3; background-position: center 25%; }
+    .hero-logo { display: none; }
+    .logo img { width: 58px; height: 58px; } header.solid .logo img, header.open .logo img { width: 46px; height: 46px; }
     .band .wrap { grid-template-columns: minmax(0, 1fr); gap: 12px; padding-top: 40px; padding-bottom: 40px; }
     .svc { grid-template-columns: minmax(0, 1fr); }
     .gal { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: 220px 160px 160px; }
@@ -220,7 +229,7 @@
 
 <header>
   <div class="wrap">
-    <a class="logo" href="#" aria-label="Драйв Бум"><i><svg><use href="#car"/></svg></i>Драйв <span>Бум</span></a>
+    <a class="logo" href="#" aria-label="Драйв Бум"><img src="logo.png" alt="" width="72" height="72">Драйв <span>Бум</span></a>
     <nav>
       <a href="#services">Услуги</a>
       <a href="#photos">Фото</a>
@@ -250,7 +259,7 @@
         <a class="btn line" href="tel:+74217315777">Позвонить</a>
       </div>
     </div>
-    <div class="hero-card"><p><b>Станционная, 2/2</b> — бокс 7, ищите неоновую вывеску</p></div>
+    <div class="hero-card"><img class="hero-logo" src="logo.png" alt="Логотип Драйв Бум"><p><b>Станционная, 2/2</b> — бокс 7, ищите неоновую вывеску</p></div>
   </div>
 </section>
 
@@ -373,7 +382,7 @@
 
 <footer>
   <div class="wrap">
-    <span>© Драйв Бум</span>
+    <span style="display:flex;align-items:center;gap:10px"><img src="logo.png" alt="" width="28" height="28">© Драйв Бум</span>
     <span>Комсомольск-на-Амуре, Станционная, 2/2 · 9:00–21:00</span>
   </div>
 </footer>
