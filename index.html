@@ -330,41 +330,21 @@
     <div>
       <span class="kick">Онлайн-запись</span>
       <h2 class="h" style="margin-top:14px">Запишитесь <span class="y">без звонка</span></h2>
-      <p class="lead">Заполните форму — заявка уйдёт нам в WhatsApp, мы подтвердим время. Работаем каждый день с 9:00 до 21:00.</p>
+      <p class="lead">Выберите день и свободное время — оно сразу закрепится за вами. Занятые окошки серые, так что не нужно звонить и спрашивать. Работаем каждый день с 9:00 до 21:00.</p>
       <div class="steps">
         <div><i>1</i><span>Укажите машину, радиус и что нужно сделать</span></div>
-        <div><i>2</i><span>Выберите день и время</span></div>
+        <div><i>2</i><span>Выберите день и свободное время</span></div>
         <div><i>3</i><span>Приезжайте ко времени — без очереди</span></div>
       </div>
     </div>
-    <form class="form" id="bookForm" novalidate>
-      <label class="wide">Что нужно
-        <select name="service">
-          <option>Сезонная переобувка</option><option>Шиномонтаж + балансировка</option><option>Ремонт прокола / пореза</option>
-          <option>Правка диска</option><option>Мотошиномонтаж</option><option>Автосервис (колодки, масло, ходовая)</option><option>Другое</option>
-        </select>
-      </label>
-      <label>Машина<input type="text" name="car" placeholder="Toyota Camry" required></label>
-      <label>Радиус
-        <select name="radius"><option>R13</option><option>R14</option><option>R15</option><option selected>R16</option><option>R17</option><option>R18</option><option>R19</option><option>R20</option><option>R21</option><option>R22</option><option>Не знаю</option></select>
-      </label>
-      <label>Дата<input type="date" name="date" required></label>
-      <label>Время<select name="time" required><option value="">Выберите</option></select></label>
-      <div class="wide checks">
-        <label><input type="checkbox" data-t="колёса на дисках"> Колёса на дисках</label>
-        <label><input type="checkbox" data-t="нужна балансировка"> Нужна балансировка</label>
-        <label><input type="checkbox" data-t="кроссовер / внедорожник"> Кроссовер / внедорожник</label>
-      </div>
-      <label>Имя<input type="text" name="name" autocomplete="given-name" required></label>
-      <label>Телефон<input type="tel" name="phone" autocomplete="tel" placeholder="+7" required></label>
-      <label class="wide">Комментарий<textarea name="comment" rows="1" placeholder="Например: низкий профиль, приеду после работы"></textarea></label>
-      <div class="wide send">
-        <button class="btn" type="submit"><svg><use href="#wa"/></svg>Записаться через WhatsApp</button>
-        <a class="btn line" href="tel:+74217315777">Позвонить</a>
-      </div>
-      <p class="wide form-msg" id="formMsg" role="status"></p>
-      <p class="wide form-note">Нажимая кнопку, вы соглашаетесь на обработку имени и телефона для записи. Данные уходят только нам.</p>
-    </form>
+    <div id="booking" style="--bk-accent:var(--yellow);--bk-on-accent:#141414;--bk-bg:var(--bg3);--bk-card:var(--bg);--bk-text:var(--text);--bk-dim:var(--dim);--bk-line:var(--line2)"></div>
+    <script>
+      // Пока сайт не запущен — демо (занятость для примера). При запуске вписать endpoint из Google Таблицы владельца и убрать demo.
+      window.BOOKING = { demo: true, endpoint: "", wa: "79242235757", name: "Драйв Бум", kind: "tyre", demoHours: ["09:00", "21:00"],
+        services: [{ name: "Сезонная переобувка", dur: 60 }, { name: "Шиномонтаж + балансировка", dur: 60 }, { name: "Ремонт прокола / пореза", dur: 30 },
+                   { name: "Правка диска", dur: 60 }, { name: "Мотошиномонтаж", dur: 60 }, { name: "Автосервис (колодки, масло, ходовая)", dur: 90 }] };
+    </script>
+    <script src="zapis.js"></script>
   </div>
 </section>
 
@@ -411,36 +391,6 @@
   const setOpen = (v) => { header.classList.toggle("open", v); burger.setAttribute("aria-expanded", v); };
   burger.addEventListener("click", () => setOpen(!header.classList.contains("open")));
   header.querySelectorAll("nav a").forEach((a) => a.addEventListener("click", () => setOpen(false)));
-})();
-// Заявка уходит в WhatsApp мастерской готовым сообщением.
-(function () {
-  const WA_PHONE = "79242235757";
-  const form = document.getElementById("bookForm"), msg = document.getElementById("formMsg"), f = form.elements;
-  const pad = (n) => String(n).padStart(2, "0"), today = new Date();
-  f.date.min = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
-  for (let h = 9; h < 21; h++) for (const m of ["00", "30"]) f.time.add(new Option(`${pad(h)}:${m}`));
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    let ok = true;
-    [f.car, f.date, f.time, f.name, f.phone].forEach((el) => {
-      const bad = !el.value.trim() || (el === f.phone && el.value.replace(/\D/g, "").length < 10);
-      el.closest("label").classList.toggle("err", bad); if (bad) ok = false;
-    });
-    if (!ok) { msg.textContent = "Заполните машину, дату, время, имя и телефон."; return; }
-    const [y, m, d] = f.date.value.split("-");
-    const extras = [...form.querySelectorAll(".checks input:checked")].map((i) => i.dataset.t);
-    const text = [
-      "Здравствуйте! Хочу записаться в «Драйв Бум» (заявка с сайта).",
-      `Услуга: ${f.service.value}`,
-      `Машина: ${f.car.value.trim()}, радиус ${f.radius.value}`,
-      `Когда: ${d}.${m}.${y}, ${f.time.value}`,
-      extras.length ? `Дополнительно: ${extras.join(", ")}` : "",
-      `Имя: ${f.name.value.trim()}`, `Телефон: ${f.phone.value.trim()}`,
-      f.comment.value.trim() ? `Комментарий: ${f.comment.value.trim()}` : "",
-    ].filter(Boolean).join("\n");
-    window.open(`https://wa.me/${WA_PHONE}?text=${encodeURIComponent(text)}`, "_blank", "noopener");
-    msg.textContent = "Открываем WhatsApp — осталось нажать «Отправить».";
-  });
 })();
 </script>
 </body>
