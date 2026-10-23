@@ -65,8 +65,8 @@
 <script>
 /* Расписание для владельца. Адрес сервера — тот же, что в настройках сайта (window.BOOKING.endpoint),
    его можно указать здесь или передать через ?e=… один раз (запоминается в этом телефоне). */
-var ENDPOINT = "";
-var DEMO = true;   // true — показать «Расписание» с примерными записями (пароль 1234), без таблицы
+var ENDPOINT = "https://script.google.com/macros/s/AKfycby0CffdplNGPqTDTylg_7MnmZN1Bg_73oMek3rbiuzPUadWyPXWNr7Fxfpm4rmALJfK/exec";
+var DEMO = false;  // true — показать «Расписание» с примерными записями (пароль 1234), без таблицы
 var DEMO_NAME = "Драйв Бум";
 (function () {
   var qs = new URLSearchParams(location.search);
@@ -88,16 +88,16 @@ var DEMO_NAME = "Драйв Бум";
     var now = new Date(), td = now.getFullYear() + "-" + pad(now.getMonth() + 1) + "-" + pad(now.getDate());
     var hours = {}; for (var i = 0; i < 7; i++) hours[i] = ["09:00", "21:00"];
     var st = { name: DEMO_NAME || "Расписание (демо)", step: 30, capacity: 1, days: 14, lead: 30, hours: hours };
-    var sv = [{ name: "Сезонная переобувка", dur: 60 }, { name: "Шиномонтаж + балансировка", dur: 60 }, { name: "Ремонт прокола / пореза", dur: 30 }, { name: "Правка диска", dur: 60 }, { name: "Автосервис (колодки, масло, ходовая)", dur: 90 }];
+    var sv = [{ name: "Сезонная переобувка", dur: 30 }, { name: "Шиномонтаж + балансировка", dur: 30 }, { name: "Ремонт прокола / пореза", dur: 30 }, { name: "Правка диска", dur: 30 }, { name: "Автосервис (колодки, масло, ходовая)", dur: 30 }];
     var list; try { list = JSON.parse(localStorage.getItem("bk_demo_admin") || "null"); } catch (e) {}
     if (!list || !list.length || list[0].seed !== td) {
       var t1 = add(td, 1), mk = function (d, t, dur, s, det, n, ph, src, stt) { return { id: Math.random().toString(16).slice(2, 10), d: d, t: t, dur: dur, service: s, details: det, name: n, phone: ph, comment: "", status: stt || "подтверждена", source: src || "вручную" }; };
-      list = [mk(td, "10:00", 60, "Сезонная переобувка", "Haval Jolion, R18", "Олег", "+79140000001", "сайт", "новая"),
+      list = [mk(td, "10:00", 30, "Сезонная переобувка", "Haval Jolion, R18", "Олег", "+79140000001", "сайт", "новая"),
               mk(td, "12:30", 30, "Ремонт прокола / пореза", "Lada Vesta, R15", "Дмитрий", "+79140000002"),
-              mk(td, "15:00", 60, "Сезонная переобувка", "Toyota RAV4, R17", "Наталья", "+79140000003", "сайт"),
-              mk(t1, "09:00", 60, "Шиномонтаж + балансировка", "Mazda CX-5, R19", "Алексей", "+79140000004", "сайт", "новая"),
-              mk(t1, "11:00", 90, "Автосервис (колодки, масло, ходовая)", "Nissan X-Trail", "Игорь", "+79140000005"),
-              mk(t1, "17:30", 60, "Сезонная переобувка", "Honda Fit, R14", "Ольга", "+79140000006", "сайт")];
+              mk(td, "15:00", 30, "Сезонная переобувка", "Toyota RAV4, R17", "Наталья", "+79140000003", "сайт"),
+              mk(t1, "09:00", 30, "Шиномонтаж + балансировка", "Mazda CX-5, R19", "Алексей", "+79140000004", "сайт", "новая"),
+              mk(t1, "11:00", 30, "Автосервис (колодки, масло, ходовая)", "Nissan X-Trail", "Игорь", "+79140000005"),
+              mk(t1, "17:30", 30, "Сезонная переобувка", "Honda Fit, R14", "Ольга", "+79140000006", "сайт")];
       list[0].seed = td;
     }
     var save = function () { try { localStorage.setItem("bk_demo_admin", JSON.stringify(list)); } catch (e) {} };
